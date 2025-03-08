@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thả Thính CSS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #ffebf2;
+            font-family: "Helvetica Neue", sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            color: #ff4081;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: background-color 0.5s ease;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 40px 30px;
+            border-radius: 25px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            width: 90vw;
+            height: 80vh;
+            text-align: center;
+            overflow: hidden;
+            transition: transform 0.5s ease;
+        }
+
+        .inner-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #ff4081;
+            text-shadow: 0 0 12px rgba(255, 64, 129, 0.6);
+            margin-bottom: 30px;
+            transition: color 0.5s ease;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s ease;
+            background-color: #ff4081;
+            color: white;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+            outline: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-no {
+            background-color: #fff;
+            color: #ff4081;
+            border: 2px solid #ff4081;
+        }
+
+        .btn-no:hover {
+            background-color: #ff4081;
+            color: white;
+        }
+
+        .btn-no span {
+            display: block;
+            font-size: 1.5rem;
+        }
+
+        /* Thêm hiệu ứng cho nút khi clicked */
+        .clicked {
+            background-color: #fff;
+            color: #ff4081;
+            border: 2px solid #ff4081;
+            transform: scale(1.1);
+            animation: none;
+        }
+
+        .happy-message {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            color: #ff4081;
+            text-align: center;
+            display: none;
+        }
+
+        .happy-message img {
+            width: 100px;
+            margin-top: 10px;
+        }
+
+        /* Thêm lớp cho text chọc quê */
+        .tease-text {
+            font-size: 1.2rem;
+            color: #ff4081;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Form nhập tên */
+        .name-entry {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 300px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .name-entry input {
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            width: 100%;
+            border: 1px solid #ff4081;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .name-entry button {
+            padding: 10px 20px;
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+        .name-entry button:hover {
+            background-color: #e4006d;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 1.2rem;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Giao diện chính sẽ hiện lên sau khi nhập đúng tên -->
+    <div class="container" id="mainContainer" style="display: none">
+        <div class="inner-container">
+            <h1>Em có thích anh không? ❤️</h1>
+            <div class="buttons">
+                <button class="btn btn-yes" id="btnYes">Có 🥰</button>
+                <button class="btn btn-no" id="btnNo">Không <span>🙄</span></button>
+            </div>
+            <div class="happy-message" id="happyMessage">
+                <p>Em thích anh! 🥳</p>
+                <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Happy" />
+            </div>
+            <div class="tease-text" id="teaseText"></div>
+        </div>
+    </div>
+
+    <!-- Form nhập tên -->
+    <div class="name-entry" id="nameEntry">
+        <h2>Nhập tên của bạn</h2>
+        <input type="text" id="nameInput" placeholder="Nhập tên..." />
+        <button onclick="checkName()">Vào thôi!</button>
+        <div class="error-message" id="errorMessage">
+            Tên không đúng! Vui lòng thử lại.
+        </div>
+    </div>
+
+    <script>
+        const mainContainer = document.getElementById("mainContainer");
+        const nameEntry = document.getElementById("nameEntry");
+        const nameInput = document.getElementById("nameInput");
+        const errorMessage = document.getElementById("errorMessage");
+        const btnNo = document.getElementById("btnNo");
+        const btnYes = document.getElementById("btnYes");
+        const happyMessage = document.getElementById("happyMessage");
+        const teaseText = document.getElementById("teaseText");
+        const body = document.body;
+        const buttons = document.querySelector(".buttons");
+
+        const correctNames = ["Người Dùng", "Alice", "Bob", "Charlie"]; // Danh sách tên hợp lệ
+
+        // Kiểm tra tên nhập vào
+        function checkName() {
+            const userName = nameInput.value.trim();
+            if (correctNames.includes(userName)) {
+                // Chuyển sang giao diện chính
+                nameEntry.style.display = "none";
+                mainContainer.style.display = "flex";
+            } else {
+                // Hiển thị thông báo lỗi
+                errorMessage.style.display = "block";
+            }
+        }
+
+
+        // Lắng nghe sự kiện di chuột vào nút "Không"
+        // Lắng nghe sự kiện di chuột vào nút "Không"
+        btnNo.addEventListener("mouseover", function () {
+            // Thay đổi nội dung của nút "Không" thành icon "lêu lêu"
+            this.innerHTML = "Lêu lêu 🤪";
+
+            // Ẩn text chọc quê ngay khi bắt đầu di chuyển
+            teaseText.style.display = "none";
+
+            // Lấy kích thước của thẻ container
+            let container = document.querySelector(".container");
+            let containerWidth = container.clientWidth;
+            let containerHeight = container.clientHeight;
+
+            // Lấy kích thước của nút "Không"
+            let btnWidth = this.offsetWidth;
+            let btnHeight = this.offsetHeight;
+
+            // Lấy vị trí của nút "Có"
+            let btnYesRect = btnYes.getBoundingClientRect();
+            let btnYesCenterX = btnYesRect.left + btnYesRect.width / 2;
+            let btnYesCenterY = btnYesRect.top + btnYesRect.height / 2;
+
+            let newX, newY;
+
+            // Kiểm tra để tạo khoảng cách tối thiểu giữa nút "Không" và nút "Có"
+            const minDistance = 150; // Khoảng cách tối thiểu giữa hai nút
+
+            do {
+                newX = Math.random() * (containerWidth - btnWidth);
+                newY = Math.random() * (containerHeight - btnHeight);
+            } while (Math.abs(newX - btnYesCenterX) < minDistance && Math.abs(newY - btnYesCenterY) < minDistance);
+
+            // Cập nhật vị trí của nút "Không"
+            this.style.position = "absolute";
+            this.style.left = `${newX}px`;
+            this.style.top = `${newY}px`;
+
+            // Thêm hiệu ứng bounce cho nút "Không"
+            this.style.animation = "moveButton 0.5s ease-out";
+        });
+
+        // Khi chuột rời khỏi nút "Không", phục hồi lại nội dung ban đầu và hiển thị lại text chọc quê
+        btnNo.addEventListener("mouseout", function () {
+            this.innerHTML = "Không <span>🙄</span>";
+            teaseText.style.display = "block"; // Hiển thị lại text chọc quê khi chuột rời khỏi
+        });
+
+        // Lắng nghe sự kiện click vào nút "Có"
+        btnYes.addEventListener("click", function () {
+            // Thay đổi giao diện khi click vào nút "Có"
+            body.style.backgroundColor = "#e8f5e9"; // Màu nền vui vẻ
+            btnYes.classList.add("clicked");
+            happyMessage.style.display = "block"; // Hiển thị thông điệp dễ thương
+
+            // Ẩn cả hai nút khi nhấn "Có"
+            buttons.style.display = "none";
+        });
+    </script>
+</body>
+
+</html>
